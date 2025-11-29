@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { TradingCandlesticks } from "@/components/TradingCandlesticks";
@@ -6,7 +8,25 @@ import { Floating3DElements } from "@/components/Floating3DElements";
 import { AnimatedSphere } from "@/components/AnimatedSphere";
 import { MarketTicker } from "@/components/MarketTicker";
 import { Award, Users, BookOpen, TrendingUp, Shield, Target, Zap, MessageSquare, Calendar, Star } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import logoIcon from "@/assets/logo-icon.ico";
 const Home = () => {
+  const {
+    toast
+  } = useToast();
+
+  // Check for submission success notification
+  useEffect(() => {
+    const submissionSuccess = sessionStorage.getItem('submission_success');
+    if (submissionSuccess === 'true') {
+      toast({
+        title: "Application Submitted Successfully! 🎉",
+        description: "We'll contact you soon to discuss your trading journey.",
+        duration: 10000
+      });
+      sessionStorage.removeItem('submission_success');
+    }
+  }, [toast]);
   const stats = [{
     value: "24,400+",
     label: "Students Enrolled"
@@ -40,6 +60,10 @@ const Home = () => {
     icon: BookOpen,
     title: "No Prerequisites",
     desc: "Start from scratch"
+  }, {
+    icon: Shield,
+    title: "Lifetime Support",
+    desc: "Ongoing guidance & assistance"
   }];
   const specialFeatures = ["WhatsApp Premium Community Support", "News Updates & Trading Plan Guidance", "Funded Accounts Assistance & Guidance", "Trading Psychology Sessions", "Revision Classes & Study Materials", "Dedicated Trading Floor Access"];
   return <div className="min-h-screen">
@@ -51,7 +75,7 @@ const Home = () => {
         {/* Animated candlesticks */}
         <TradingCandlesticks />
 
-        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
             <motion.div initial={{
             opacity: 0,
@@ -62,29 +86,29 @@ const Home = () => {
           }} transition={{
             duration: 0.8
           }}>
-              <h1 className="text-5xl lg:text-7xl font-black mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black mb-4 sm:mb-6 leading-tight break-words">
                 Master Trading.{" "}
                 <span className="text-gradient-cyan">Build Wealth.</span>
                 <br />
                 <span className="text-gradient-gold">Transform Your Future.</span>
               </h1>
               
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl">
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-6 sm:mb-8 leading-relaxed max-w-2xl">
                 Learn from NISM certified mentors. Master the Indian Stock Market & Forex Trading 
                 with expert guidance, live sessions, and comprehensive support.
               </p>
 
-              <div className="flex flex-wrap gap-4 mb-12">
-                <Button size="lg" className="bg-gradient-cyan font-bold text-lg px-8 hover:opacity-90 glow-cyan shadow-lg rounded-sm text-cyan bg-slate-900 hover:bg-slate-800">
-                  Explore Courses
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-12">
+                <Button size="lg" variant="outline" className="border-secondary text-secondary hover:bg-secondary hover:text-navy font-semibold text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto" asChild>
+                  <Link to="/courses">Explore Courses</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-secondary text-secondary hover:bg-secondary hover:text-navy font-semibold text-lg px-8">
+                <Button size="lg" variant="outline" className="border-secondary text-secondary hover:bg-secondary hover:text-navy font-semibold text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto">
                   Join Free Webinar
                 </Button>
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {stats.map((stat, i) => <motion.div key={i} initial={{
                 opacity: 0,
                 y: 20
@@ -94,8 +118,8 @@ const Home = () => {
               }} transition={{
                 delay: 0.2 + i * 0.1
               }} className="text-center lg:text-left">
-                    <div className="text-3xl font-bold text-gradient-cyan mb-1">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    <div className="text-2xl sm:text-3xl font-bold text-gradient-cyan mb-1">{stat.value}</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
                   </motion.div>)}
               </div>
             </motion.div>
@@ -212,7 +236,7 @@ const Home = () => {
         }} viewport={{
           once: true
         }} className="max-w-4xl mx-auto text-center">
-            <Award className="w-20 h-20 text-accent mx-auto mb-6 glow-gold" />
+            <Award className="w-16 h-16 text-accent mx-auto mb-6 glow-gold" />
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
               Excel Your Career with <span className="text-gradient-gold">NISM Certifications</span>
             </h2>
@@ -220,8 +244,8 @@ const Home = () => {
               Get Bluemantle Institute Certification along with NISM Certification Guidance & Exam Assistance. 
               Build a strong foundation for your financial market career.
             </p>
-            <Button size="lg" className="bg-gradient-to-r from-accent to-accent/80 text-navy font-bold text-lg px-8 glow-gold">
-              Get Certified
+            <Button size="lg" className="bg-gradient-to-r from-accent to-accent/80 text-navy font-bold text-lg px-8 glow-gold" asChild>
+              <Link to="/apply">Get Certified</Link>
             </Button>
           </motion.div>
         </div>
@@ -249,11 +273,11 @@ const Home = () => {
                 Join thousands of successful traders who transformed their lives with Bluemantle
               </p>
               <div className="flex flex-wrap gap-4 justify-center">
-                <Button size="lg" className="bg-navy text-secondary font-bold text-lg px-8 hover:bg-navy/90 glow-purple">
-                  Apply Now
+                <Button size="lg" className="bg-navy text-secondary font-bold text-lg px-8 hover:bg-navy/90 glow-purple" asChild>
+                  <Link to="/apply">Apply Now</Link>
                 </Button>
                 <Button size="lg" variant="outline" className="border-navy font-semibold text-lg px-8 bg-slate-950 hover:bg-slate-800 opacity-100 rounded-md text-violet-700" asChild>
-                  <a href="/Bluemantle%20Brochure.pdf" download="Bluemantle-Brochure.pdf" target="_blank" rel="noopener noreferrer">
+                  <a href="/Bluemantle%20Brochure.pdf" download="Bluemantle-Brochure.pdf" target="_blank" rel="noopener noreferrer" className="text-cyan-400">
                     Download Brochure
                   </a>
                 </Button>
